@@ -10,11 +10,11 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace FreeCRMDemo.Tests
 {   [TestClass]
+    [Parallelizable(ParallelScope.Children)]
     public class Tests : Base
     {
 
-        [Test]
-        [Parallelizable(ParallelScope.Self)]
+        [Test,Category("Smoke")]
         public void ValidLoginTest()
         {
             LoginPage loginpage = new LoginPage(getDriver());
@@ -24,13 +24,13 @@ namespace FreeCRMDemo.Tests
             homepage.logout();
            
         }
-        [Test]
+        [Test, Category("Smoke")]
         public void InvalidLoginTest()
         {
             LoginPage loginpage = new LoginPage(getDriver());
             loginpage.inValidvalidLogin();
         }
-        [Test]
+        [Test, Category("Regrission")]
         public void AddContactTest()
         {
             LoginPage loginpage = new LoginPage(getDriver());

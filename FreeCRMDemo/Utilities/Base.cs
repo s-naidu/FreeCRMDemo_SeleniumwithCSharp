@@ -19,7 +19,9 @@ namespace FreeCRMDemo.Utilities
     {
         public ExtentReports extent;
         public ExtentTest test;
-        public IWebDriver driver;
+        // public IWebDriver driver;
+        String browserName;
+        public ThreadLocal<IWebDriver> driver = new ThreadLocal<IWebDriver>();
 
         [OneTimeSetUp]
         public void Setup()
@@ -40,18 +42,24 @@ namespace FreeCRMDemo.Utilities
         [SetUp]
         public void LaunchBrowser()
         {
-            test=extent.CreateTest(TestContext.CurrentContext.Test.Name);
+            test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
+            browserName = TestContext.Parameters["browserName"];
+            if (browserName == null)
+            {
+
+                browserName = ConfigurationManager.AppSettings["browser"];
+            }
             //fetching specified browser details from app config file
-            String browserName = ConfigurationManager.AppSettings["browser"];
             InitBrowser(browserName);
-            driver.Manage().Window.Maximize();
+            driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+            driver.Value.Manage().Window.Maximize();
             //fetching test url details from app config file
-            driver.Url = ConfigurationManager.AppSettings["Url"];
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+            driver.Value.Url = ConfigurationManager.AppSettings["Url"];
+
         }
         public IWebDriver getDriver()
         {
-            return driver;
+            return driver.Value;
         }
 
         public void InitBrowser(string browserName)
@@ -61,7 +69,7 @@ namespace FreeCRMDemo.Utilities
                 case "Chrome":
 
                     new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
-                    driver = new ChromeDriver();
+                    driver.Value = new ChromeDriver();
                     break;
 
                 case "Firefox":
@@ -70,13 +78,13 @@ namespace FreeCRMDemo.Utilities
                     //Handling InsecureCertificates errors
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
                     firefoxOptions.AcceptInsecureCertificates = true;
-                    driver = new FirefoxDriver(firefoxOptions);
+                    driver.Value = new FirefoxDriver(firefoxOptions);
 
                     break;
 
                 case "Edge":
                     new WebDriverManager.DriverManager().SetUpDriver(new EdgeConfig());
-                    driver = new EdgeDriver();
+                    driver.Value = new EdgeDriver();
                     break;
 
             }
@@ -95,7 +103,7 @@ namespace FreeCRMDemo.Utilities
             if (status == TestStatus.Failed)
             {
 
-                test.Fail("Test failed", captureScreenShot(driver, fileName));
+                test.Fail("Test failed", captureScreenShot(driver.Value, fileName));
                 test.Log(Status.Fail, "test failed with logtrace" + stackTrace);
 
             }
@@ -105,7 +113,7 @@ namespace FreeCRMDemo.Utilities
             }
 
             extent.Flush();
-            driver.Quit();
+            driver.Value.Quit();
         }
 
         public MediaEntityModelProvider captureScreenShot(IWebDriver driver, String screenShotName)
