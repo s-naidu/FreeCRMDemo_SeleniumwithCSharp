@@ -18,7 +18,7 @@ Clone this project and run to build the project.
 dotnet build FreeCRMDemo.csproj 
 ```
 
-To run the tests;
+To run the tests from CLI;
 ```
 dotnet test FreeCRMDemo.csproj --filter TestCategory=Smoke -- TestRunParameters.Parameter(name=\"browserName\", value=\"Chrome\")
 ```
