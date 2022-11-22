@@ -10,7 +10,7 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace FreeCRMDemo.Tests
 {   [TestClass]
-    [Parallelizable(ParallelScope.Children)]
+    //[Parallelizable(ParallelScope.Children)]
     public class Tests : Base
     {
 
