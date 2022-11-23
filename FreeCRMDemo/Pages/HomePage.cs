@@ -85,6 +85,7 @@ namespace FreeCRMDemo.Pages
                 // selectContact.Click();
                 clickdeleteicon.Click();
                 deleteconfirm.Click();
+                Thread.Sleep(5000);
                 string nocontracsresults = driver.FindElement(By.XPath("//p[contains(text(),'No records found')]")).Text;
                 Assert.That(nocontracsresults, Is.EqualTo("No records found"));
             }
