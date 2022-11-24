@@ -22,72 +22,108 @@ namespace FreeCRMDemo.Pages
             this.driver = driver;
             PageFactory.InitElements(driver, this);
         }
+        //common save and delete and text elements
+        [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']/div[2]/div/button[3]/i")]
+        private IWebElement commondeletebutton;
 
+        [FindsBy(How = How.CssSelector, Using = "body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button.ui.red.button")]
+        private IWebElement commonconfirmdeletebutton;
+
+        [FindsBy(How = How.XPath, Using = "//p[contains(text(),'No records found')]")]
+        private IWebElement commonnorecordstext;
+  
+        [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']/div[2]/div/button[2]")]
+        private IWebElement commonsavebutton;
+
+        [FindsBy(How = How.Id, Using = "main-nav")]
+        private IWebElement Leftmenubar;
+
+
+        //Add calender section elements
+        [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[2]/button/i")]
+        private IWebElement LeftmenubaraddcalenderEvent;
+        
+        [FindsBy(How = How.Name, Using = "title")]
+        private IWebElement calenderEventname;
+
+        [FindsBy(How = How.XPath, Using = "# dashboard-toolbar > div.ui.header.item.mb5.light-black")]
+        private IWebElement calendertitle;
+
+        //Add contact section elements
         [FindsBy(How = How.CssSelector, Using = "#main-nav > div:nth-child(3) > button > i")]
         private IWebElement Leftmenubaraddcontract;
 
-        [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[3]/a/span")]
-        private IWebElement Leftmenubarcontract;
-
         [FindsBy(How = How.Name, Using = "first_name")]
         private IWebElement firstname;
+ 
         [FindsBy(How = How.Name, Using = "last_name")]
         private IWebElement lastname;
-        [FindsBy(How = How.CssSelector, Using = "#dashboard-toolbar > div.ui.right.secondary.pointing.menu.toolbar-container > div > button.ui.linkedin.button")]
-        private IWebElement savebutton;
-
-
+ 
         [FindsBy(How = How.XPath, Using = "//*[@id='top-header-menu']/div[2]/div[2]/div")]
         private IWebElement logoutheader;
 
         [FindsBy(How = How.CssSelector, Using = "#top-header-menu > div.right.menu > div.ui.buttons > div > div > a:nth-child(5) > span")]
         private IWebElement logoubutton;
-        [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']")]
-        private IWebElement dashboard;
+ 
+        //Add company section elements
+        [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[4]/button/i")]
+        private IWebElement Leftmenubaraddcompany;
 
-        [FindsBy(How = How.CssSelector, Using = "div.ui.fluid.container div.ui.fluid.container:nth-child(2) div.ui.fluid.container:nth-child(2) div.ui.fluid.container div.ui.secondary.pointing.menu.header-title.page-header:nth-child(1) div.ui.right.secondary.pointing.menu.toolbar-container:nth-child(2) div.item.view-page-toolbar button.ui.button.icon:nth-child(14) > i.trash.icon")]
-        private IWebElement clickdeleteicon;
+        [FindsBy(How = How.Name, Using = "name")]
+        private IWebElement companyTitle;
+ 
+        //Add Deal section elements
+        [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[5]/button/i")]
+        private IWebElement Leftmenubaradddeal;
 
-        [FindsBy(How = How.CssSelector, Using = "body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button.ui.red.button")]
-        private IWebElement deleteconfirm;
-
-        [FindsBy(How = How.CssSelector, Using = "div.ui.fluid.container div.ui.fluid.container:nth-child(2) div.ui.fluid.container:nth-child(2) div.ui.fluid.container div.ui.fluid.container.main-content:nth-child(2) div.table-wrapper table.ui.celled.sortable.striped.table.custom-grid tbody:nth-child(2) tr:nth-child(1) td:nth-child(1) div.ui.fitted.read-only.checkbox > label:nth-child(2)")]
-        private IWebElement selectContact;
-
-
-        [FindsBy(How = How.XPath, Using = "//*[@id='main-content']/div/div[2]/div/table/tbody/tr/td[8]/div/button/i")]
-        private IWebElement deleteContact;
-        [FindsBy(How = How.CssSelector, Using = "body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button:nth-child(2)")]
-        private IWebElement confirmdeleteContact;
-
-        [FindsBy(How = How.XPath, Using = "//p[contains(text(),'No records found')]")]
-        private IWebElement nocontacts;
+        [FindsBy(How = How.Name, Using = "title")]
+        private IWebElement dealtitle;
 
 
+        //common method to click lefemenu
+        public void clickLeftMenu()
+        {
+            Actions mousehover = new Actions(driver);
+            mousehover.MoveToElement(Leftmenubar).Perform();
+
+        }
+        public void commonSaveButton()
+        {
+            this.commonsavebutton.Click();
+        }
+
+        public void clickdeleteandConfirmdelete()
+        {
+           this.commondeletebutton.Click();
+            this.commonconfirmdeletebutton.Click();
+
+        }
+
+        public void VerifyNoRecords()
+        {
+            string text = this.commonnorecordstext.Text;
+            Assert.That(text, Is.EqualTo("No records found"));
+        }
+        public void waitForvisibleDelete()
+        {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='dashboard-toolbar']/div[2]/div/button[3]/i")));
+        }
+
+        //Contact method
         public void addNewContact()
         {
             try
             {
-                Actions mousehover = new Actions(driver);
-                mousehover.MoveToElement(Leftmenubaraddcontract).Perform();
+                this.clickLeftMenu();
                 Leftmenubaraddcontract.Click();
                 firstname.SendKeys(ConfigurationManager.AppSettings["firstname"]);
                 lastname.SendKeys(ConfigurationManager.AppSettings["lastname"]);
-                savebutton.Click();
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("div.ui.fluid.container div.ui.fluid.container:nth-child(2) div.ui.fluid.container:nth-child(2) div.ui.fluid.container div.ui.secondary.pointing.menu.header-title.page-header:nth-child(1) div.ui.right.secondary.pointing.menu.toolbar-container:nth-child(2) div.item.view-page-toolbar button.ui.button.icon:nth-child(14) > i.trash.icon")));
-                string actualvalue = driver.FindElement(By.CssSelector("div.ui.fluid.container div.ui.fluid.container:nth-child(2) div.ui.fluid.container:nth-child(2) div.ui.fluid.container div.ui.secondary.pointing.menu.header-title.page-header:nth-child(1) > div.ui.header.item.mb5.light-black:nth-child(1)")).Text;
-                Assert.That(actualvalue, Is.EqualTo("firstname lastname"));
-                TestContext.Progress.WriteLine(actualvalue);
-
-                //dashboard.Click();
-                //Thread.Sleep(5000);
-                // selectContact.Click();
-                clickdeleteicon.Click();
-                deleteconfirm.Click();
-                Thread.Sleep(5000);
-                string nocontracsresults = driver.FindElement(By.XPath("//p[contains(text(),'No records found')]")).Text;
-                Assert.That(nocontracsresults, Is.EqualTo("No records found"));
+                this.commonSaveButton();
+                this.waitForvisibleDelete();
+                this.clickdeleteandConfirmdelete();
+                Thread.Sleep(3000);
+                this.VerifyNoRecords();
             }
             catch (Exception e)
             {
@@ -95,7 +131,71 @@ namespace FreeCRMDemo.Pages
                 throw;
             }
 
-            
+        }
+
+        //Calender method
+        public void addNewCalenderEvent()
+        {
+            try
+            {
+                this.clickLeftMenu();
+                LeftmenubaraddcalenderEvent.Click();
+                Thread.Sleep(3000);
+                calenderEventname.SendKeys(ConfigurationManager.AppSettings["calenderEventname"]);
+                this.commonSaveButton();
+                this.waitForvisibleDelete();
+                this.clickdeleteandConfirmdelete();
+                string createeventtitle = driver.FindElement(By.XPath("//h3[contains(text(),'Events')]")).Text;
+                Assert.That(createeventtitle, Is.EqualTo("Events"));
+            }
+            catch (Exception e)
+            {
+                TestContext.Progress.WriteLine(e.StackTrace);
+                throw;
+            }
+
+        }
+        
+        //company method
+        public void addNewCompany()
+        {
+            try
+            {
+                this.clickLeftMenu();
+                Leftmenubaraddcompany.Click();
+                companyTitle.SendKeys(ConfigurationManager.AppSettings["companyname"]);
+                this.commonSaveButton();
+                this.waitForvisibleDelete();
+                this.clickdeleteandConfirmdelete();
+                Thread.Sleep(3000);
+                this.VerifyNoRecords();
+            }
+            catch (Exception e)
+            {
+                TestContext.Progress.WriteLine(e.StackTrace);
+                throw;
+            }
+
+        }
+
+        public void addNewDeal()
+        {
+            try
+            {
+                this.clickLeftMenu();
+                Leftmenubaradddeal.Click();
+                dealtitle.SendKeys(ConfigurationManager.AppSettings["dealtitle"]);
+                this.commonSaveButton();
+                this.waitForvisibleDelete();
+                this.clickdeleteandConfirmdelete();
+                Thread.Sleep(3000);
+                this.VerifyNoRecords();
+            }
+            catch (Exception e)
+            {
+                TestContext.Progress.WriteLine(e.StackTrace);
+                throw;
+            }
 
         }
 
@@ -112,14 +212,6 @@ namespace FreeCRMDemo.Pages
             logoubutton.Click();
             return new LoginPage(driver);
         }
-
-         //public void waitfordealsboxtoload()
-        //{
-        //    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-        //    wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//*[@id='main-content']/div/div/div[2]/div/div[2]")));
-
-        //}
-
         public void searchContact()
         {
 
