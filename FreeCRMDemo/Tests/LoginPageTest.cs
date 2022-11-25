@@ -1,13 +1,15 @@
 using FreeCRMDemo.Pages;
 using FreeCRMDemo.Utilities;
+using FreeCRMDemo.Utilities.ReportUtil;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace FreeCRMDemo.Tests
 {
-    [TestClass]
-    //[Parallelizable(ParallelScope.Children)]
-    public class LoginPageTests : Base
+    //[TestFixture]
+    [Parallelizable]
+    public class LoginPageTest : Base
     {
 
         [Test, Category("Smoke")]

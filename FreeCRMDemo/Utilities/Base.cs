@@ -5,7 +5,10 @@ using System.Threading;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using FreeCRMDemo.Utilities;
+using FreeCRMDemo.Utilities.ReportUtil;
+using NPOI.XWPF.UserModel;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -15,38 +18,31 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace FreeCRMDemo.Utilities
 {
+
     public class Base
     {
         public ExtentReports extent;
         public ExtentTest test;
-        // public IWebDriver driver;
-        String browserName;
-        public ThreadLocal<IWebDriver> driver = new ThreadLocal<IWebDriver>();
+        string browserName;
 
         [OneTimeSetUp]
-        public void Setup()
+        public void GlobalSetup()
 
         {
-            string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-            String reportPath = projectDirectory + "//index.html";
-            var htmlReporter = new ExtentHtmlReporter(reportPath);
-            extent = new ExtentReports();
-            extent.AttachReporter(htmlReporter);
-            extent.AddSystemInfo("Host Name", "Local host");
-            extent.AddSystemInfo("Environment", "QA");
-            extent.AddSystemInfo("Username", "Sudarshan");
-
+            ExtentTestManager.CreateParentTest(GetType().Name);
         }
+
+        public ThreadLocal<IWebDriver> driver = new ThreadLocal<IWebDriver>();
 
         [SetUp]
         public void LaunchBrowser()
         {
-            test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
+            ExtentTestManager.CreateTest(TestContext.CurrentContext.Test.Name);
+           //test = ExtentTestManager.CreateParentTest(GetType().Name);
+           
             browserName = TestContext.Parameters["browserName"];
             if (browserName == null)
             {
-
                 browserName = ConfigurationManager.AppSettings["browser"];
             }
             //fetching specified browser details from app config file
@@ -79,7 +75,6 @@ namespace FreeCRMDemo.Utilities
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
                     firefoxOptions.AcceptInsecureCertificates = true;
                     driver.Value = new FirefoxDriver(firefoxOptions);
-
                     break;
 
                 case "Edge":
@@ -87,43 +82,87 @@ namespace FreeCRMDemo.Utilities
                     driver.Value = new EdgeDriver();
                     break;
 
+                default:
+                    Assert.Fail("Invalid browser");
+                    break;
+
             }
+        }
+
+        [OneTimeTearDown]
+        public void GlobalTearDown()
+        {
+            ExtentService.GetExtent().Flush();
         }
 
         [TearDown]
         public void AfterTest()
 
         {
-            var status = TestContext.CurrentContext.Result.Outcome.Status;
-            var stackTrace = TestContext.CurrentContext.Result.StackTrace;
-
-            DateTime time = DateTime.Now;
-            String fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
-
-            if (status == TestStatus.Failed)
+            try
             {
+                var status = TestContext.CurrentContext.Result.Outcome.Status;
+                //var stackTrace = TestContext.CurrentContext.Result.StackTrace;
+                var errorMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.Message)
+                        ? ""
+                        : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.Message);
 
-                test.Fail("Test failed", captureScreenShot(driver.Value, fileName));
-                test.Log(Status.Fail, "test failed with logtrace" + stackTrace);
+                var stackMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
+                        ? ""
+                        : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.StackTrace);
+                switch (status)
+                {
+                    case TestStatus.Failed:
+                        ReportLog.Fail("Test Failed");
+                        ReportLog.Fail(errorMessage);
+                        ReportLog.Fail(stackMessage);
+                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value,TestContext.CurrentContext.Test.Name));
+                        break;
+                    case TestStatus.Skipped:
+                        ReportLog.Skip("Test Failed");
+                        break;
+                    case TestStatus.Passed:
+                        ReportLog.Pass("Test Passed");
+                        break;
+                    default:
+                        break;
+                }
+
+                //DateTime time = DateTime.Now;
+                //String fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
+
+                //if (status == TestStatus.Failed)
+                //{
+
+                //    test.Fail("Test failed", captureScreenShot(driver.Value, fileName));
+                //    test.Log(Status.Fail, "test failed with logtrace" + stackTrace);
+                //}
+                //else if (status == TestStatus.Passed)
+                //{
+
+                //}
 
             }
-            else if (status == TestStatus.Passed)
+            catch (Exception e)
             {
 
+                throw new Exception("Exception: " + e);
             }
-
-            extent.Flush();
-            driver.Value.Quit();
+            finally
+            {
+                driver.Value.Quit();
+            }
         }
 
         public MediaEntityModelProvider captureScreenShot(IWebDriver driver, String screenShotName)
 
         {
-            ITakesScreenshot ts = (ITakesScreenshot)driver;
-            var screenshot = ts.GetScreenshot().AsBase64EncodedString;
+            //ITakesScreenshot ts = (ITakesScreenshot)driver;
+            var screenshot = ((ITakesScreenshot)driver).GetScreenshot().AsBase64EncodedString;
 
             return MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot, screenShotName).Build();
 
         }
+
     }
 }

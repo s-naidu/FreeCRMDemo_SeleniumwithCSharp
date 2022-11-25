@@ -106,7 +106,7 @@ namespace FreeCRMDemo.Pages
         }
         public void waitForvisibleDelete()
         {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='dashboard-toolbar']/div[2]/div/button[3]/i")));
         }
 
@@ -188,7 +188,7 @@ namespace FreeCRMDemo.Pages
                 this.commonSaveButton();
                 this.waitForvisibleDelete();
                 this.clickdeleteandConfirmdelete();
-                Thread.Sleep(3000);
+                Thread.Sleep(5000);
                 this.VerifyNoRecords();
             }
             catch (Exception e)
@@ -199,12 +199,12 @@ namespace FreeCRMDemo.Pages
 
         }
 
-        public string Get8CharacterRandomString()
-        {
-            string path = Path.GetRandomFileName();
-            path = path.Replace(".", ""); // Remove period.
-            return path.Substring(0, 8);  // Return 8 character string
-        }
+        //public string Get8CharacterRandomString()
+        //{
+        //    string path = Path.GetRandomFileName();
+        //    path = path.Replace(".", ""); // Remove period.
+        //    return path.Substring(0, 8);  // Return 8 character string
+        //}
 
         public LoginPage logout()
         {

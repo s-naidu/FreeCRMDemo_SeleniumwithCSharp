@@ -1,13 +1,15 @@
 ﻿using FreeCRMDemo.Pages;
 using FreeCRMDemo.Utilities;
+using FreeCRMDemo.Utilities.ReportUtil;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace FreeCRMDemo.Tests
 {
-    [TestClass]
-    //[Parallelizable(ParallelScope.Children)]
-    public class HomePageTests : Base
+    //[TestFixture]
+    [Parallelizable]
+    public class HomePageTest : Base
     {
 
         [Test, Category("Regression")]
@@ -18,9 +20,7 @@ namespace FreeCRMDemo.Tests
             loginpage.validLogin();
             Thread.Sleep(3000);
             homepage.addNewCalenderEvent();
-            //homepage.logout();
         }
-
 
         [Test, Category("Regression")]
         public void AddContactTest()
@@ -30,7 +30,7 @@ namespace FreeCRMDemo.Tests
             loginpage.validLogin();
             Thread.Sleep(3000);
             homepage.addNewContact();
-            //homepage.logout();
+
         }
         [Test, Category("Regression")]
         public void AddcompanyTest()
