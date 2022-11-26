@@ -138,7 +138,7 @@ namespace FreeCRMDemo.Utilities
 
         public MediaEntityModelProvider captureScreenShot(IWebDriver driver, String screenShotName)
         {
-            var screenshot = ((ITakesScreenshot)driver).GetScreenshot().AsBase64EncodedString;
+            var screenshot = "data:image/png;base64," +((ITakesScreenshot)driver).GetScreenshot().AsBase64EncodedString;
             return MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot, screenShotName).Build();
 
         }
