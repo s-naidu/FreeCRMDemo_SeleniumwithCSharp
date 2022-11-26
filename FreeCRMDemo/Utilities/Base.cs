@@ -6,7 +6,6 @@ using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using FreeCRMDemo.Utilities;
 using FreeCRMDemo.Utilities.ReportUtil;
-using NPOI.HPSF;
 using NPOI.XWPF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -19,7 +18,6 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace FreeCRMDemo.Utilities
 {
-
     public class Base
     {
         public ExtentReports extent;
@@ -39,8 +37,6 @@ namespace FreeCRMDemo.Utilities
         public void LaunchBrowser()
         {
             ExtentTestManager.CreateTest(TestContext.CurrentContext.Test.Name);
-           //test = ExtentTestManager.CreateParentTest(GetType().Name);
-           
             browserName = TestContext.Parameters["browserName"];
             if (browserName == null)
             {
@@ -103,7 +99,6 @@ namespace FreeCRMDemo.Utilities
             try
             {
                 var status = TestContext.CurrentContext.Result.Outcome.Status;
-                //var stackTrace = TestContext.CurrentContext.Result.StackTrace;
                 var errorMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.Message)
                         ? ""
                         : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.Message);
@@ -111,15 +106,14 @@ namespace FreeCRMDemo.Utilities
                 var stackMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
                         ? ""
                         : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.StackTrace);
-                DateTime time = DateTime.Now;
-                String fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
+
                 switch (status)
                 {
                     case TestStatus.Failed:
                         ReportLog.Fail("Test Failed");
                         ReportLog.Fail(errorMessage);
                         ReportLog.Fail(stackMessage);
-                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value, fileName));
+                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value, TestContext.CurrentContext.Test.Name));
                         break;
                     case TestStatus.Skipped:
                         ReportLog.Skip("Test Failed");
@@ -130,21 +124,6 @@ namespace FreeCRMDemo.Utilities
                     default:
                         break;
                 }
-
-                //DateTime time = DateTime.Now;
-                //String fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
-
-                //if (status == TestStatus.Failed)
-                //{
-
-                //    test.Fail("Test failed", captureScreenShot(driver.Value, fileName));
-                //    test.Log(Status.Fail, "test failed with logtrace" + stackTrace);
-                //}
-                //else if (status == TestStatus.Passed)
-                //{
-
-                //}
-
             }
             catch (Exception e)
             {
@@ -158,11 +137,8 @@ namespace FreeCRMDemo.Utilities
         }
 
         public MediaEntityModelProvider captureScreenShot(IWebDriver driver, String screenShotName)
-
         {
-            //ITakesScreenshot ts = (ITakesScreenshot)driver;
             var screenshot = ((ITakesScreenshot)driver).GetScreenshot().AsBase64EncodedString;
-
             return MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot, screenShotName).Build();
 
         }
