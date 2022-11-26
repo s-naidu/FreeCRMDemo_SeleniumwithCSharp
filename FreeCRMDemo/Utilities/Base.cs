@@ -6,6 +6,7 @@ using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using FreeCRMDemo.Utilities;
 using FreeCRMDemo.Utilities.ReportUtil;
+using NPOI.HPSF;
 using NPOI.XWPF.UserModel;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -110,13 +111,15 @@ namespace FreeCRMDemo.Utilities
                 var stackMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
                         ? ""
                         : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.StackTrace);
+                DateTime time = DateTime.Now;
+                String fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
                 switch (status)
                 {
                     case TestStatus.Failed:
                         ReportLog.Fail("Test Failed");
                         ReportLog.Fail(errorMessage);
                         ReportLog.Fail(stackMessage);
-                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value,TestContext.CurrentContext.Test.Name));
+                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value, fileName));
                         break;
                     case TestStatus.Skipped:
                         ReportLog.Skip("Test Failed");

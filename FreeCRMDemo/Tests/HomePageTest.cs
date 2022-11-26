@@ -7,8 +7,8 @@ using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttri
 
 namespace FreeCRMDemo.Tests
 {
-    //[TestFixture]
-    [Parallelizable]
+    [TestFixture]
+    //[Parallelizable]
     public class HomePageTest : Base
     {
 
