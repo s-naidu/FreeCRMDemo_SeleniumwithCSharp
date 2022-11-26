@@ -99,31 +99,24 @@ namespace FreeCRMDemo.Utilities
             try
             {
                 var status = TestContext.CurrentContext.Result.Outcome.Status;
-                var stackTrace = TestContext.CurrentContext.Result.StackTrace;
-                //var errorMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.Message)
-                //        ? ""
-                //        : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.Message);
+                var errorMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.Message)
+                        ? ""
+                        : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.Message);
 
-                //var stackMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
-                //        ? ""
-                //        : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.StackTrace);
-                DateTime time = DateTime.Now;
-                String fileName = "Screenshot_" + time.ToString("h_mm_ss") + ".png";
-
-
+                var stackMessage = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace)
+                        ? ""
+                        : string.Format("<pre>{0}</pre>", TestContext.CurrentContext.Result.StackTrace);
 
                 switch (status)
                 {
                     case TestStatus.Failed:
                         ReportLog.Fail("Test Failed");
-                       // ReportLog.Fail(errorMessage);
-                       // ReportLog.Fail(stackMessage);
-                        //ReportLog.Fail("Screenshot", captureScreenShot(driver.Value, TestContext.CurrentContext.Test.Name));
-                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value, fileName));
-
+                        ReportLog.Fail(errorMessage);
+                        ReportLog.Fail(stackMessage);
+                        ReportLog.Fail("Screenshot", captureScreenShot(driver.Value, TestContext.CurrentContext.Test.Name));
                         break;
                     case TestStatus.Skipped:
-                        ReportLog.Skip("Test Skipped");
+                        ReportLog.Skip("Test Failed");
                         break;
                     case TestStatus.Passed:
                         ReportLog.Pass("Test Passed");
