@@ -46,7 +46,7 @@ namespace FreeCRMDemo.Pages
             loginpassword.SendKeys(ConfigurationManager.AppSettings["invalidloginpassword"]);
             loginbutton.Click();
             String errorMessage = driver.FindElement(By.XPath("//*[@id='ui']/div/div/form/div/div[3]/div")).Text;
-            Assert.That(errorMessage, Is.EqualTo("Something went wrong..."));
+            Assert.That(errorMessage, Is.EqualTo("Something went wrong.."));
         }
         public void verifyTitle()
         {

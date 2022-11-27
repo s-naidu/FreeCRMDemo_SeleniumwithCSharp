@@ -19,7 +19,7 @@ namespace FreeCRMDemo.Tests
             HomePage homepage = new HomePage(getDriver());
             loginpage.validLogin();
             loginpage.verifyTitle();
-            homepage.logout();
+            homepage.Logout();
             Thread.Sleep(3000);
 
         }

@@ -19,7 +19,7 @@ namespace FreeCRMDemo.Tests
             HomePage homepage = new HomePage(getDriver());
             loginpage.validLogin();
             Thread.Sleep(3000);
-            homepage.addNewCalenderEvent();
+            homepage.AddNewCalenderEvent();
         }
 
         [Test, Category("Regression")]
@@ -29,7 +29,7 @@ namespace FreeCRMDemo.Tests
             HomePage homepage = new HomePage(getDriver());
             loginpage.validLogin();
             Thread.Sleep(3000);
-            homepage.addNewContact();
+            homepage.AddNewContact();
 
         }
         [Test, Category("Regression")]
@@ -39,7 +39,7 @@ namespace FreeCRMDemo.Tests
             HomePage homepage = new HomePage(getDriver());
             loginpage.validLogin();
             Thread.Sleep(3000);
-            homepage.addNewCompany();
+            homepage.AddNewCompany();
         }
 
         [Test, Category("Regression")]
@@ -49,7 +49,37 @@ namespace FreeCRMDemo.Tests
             HomePage homepage = new HomePage(getDriver());
             loginpage.validLogin();
             Thread.Sleep(3000);
-            homepage.addNewDeal();
+            homepage.AddNewDeal();
+        }
+
+        [Test, Category("Regression")]
+        public void AddTaskTest()
+        {
+            LoginPage loginpage = new LoginPage(getDriver());
+            HomePage homepage = new HomePage(getDriver());
+            loginpage.validLogin();
+            Thread.Sleep(3000);
+            homepage.AddNewTask();
+        }
+
+        [Test, Category("Regression")]
+        public void AddCaseTest()
+        {
+            LoginPage loginpage = new LoginPage(getDriver());
+            HomePage homepage = new HomePage(getDriver());
+            loginpage.validLogin();
+            Thread.Sleep(3000);
+            homepage.AddNewCase();
+        }
+
+        [Test, Category("Regression")]
+        public void AddDocumentTest()
+        {
+            LoginPage loginpage = new LoginPage(getDriver());
+            HomePage homepage = new HomePage(getDriver());
+            loginpage.validLogin();
+            Thread.Sleep(3000);
+            homepage.AddNewDocument();
         }
 
     }
