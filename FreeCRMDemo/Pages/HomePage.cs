@@ -117,6 +117,7 @@ namespace FreeCRMDemo.Pages
         {
             Actions mousehover = new Actions(driver);
             mousehover.MoveToElement(Leftmenubar).Perform();
+            Thread.Sleep(5000);
         }
         public void CommonSaveButton()
         {
