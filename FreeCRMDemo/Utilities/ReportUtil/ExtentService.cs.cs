@@ -17,7 +17,7 @@ namespace FreeCRMDemo.Utilities.ReportUtil
             if (extent == null)
             {
                 extent = new ExtentReports();
-                string reportDir = Path.Combine(Utility.GetProjectRootDirectory(), "Report");
+                string reportDir = Path.Combine(Utility.GetProjectRootDirectory(), "Reports");
                 if (Directory.Exists(reportDir))
                     Directory.CreateDirectory(reportDir);
 
