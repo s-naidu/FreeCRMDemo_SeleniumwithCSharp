@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="DotNetSeleniumExtras.PageObjects" Version="3.11.0" />
+		<PackageReference Include="DotNetSeleniumExtras.PageObjects.Core" Version="4.3.0" />
 		<PackageReference Include="ExtentReports" Version="4.1.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
@@ -24,6 +25,23 @@
 		<PackageReference Include="SeleniumExtras.WaitHelpers" Version="1.0.2" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
 		<PackageReference Include="WebDriverManager" Version="2.16.1" />
+	</ItemGroup>
+	 <ItemGroup>
+		<None Remove="Selenium.WebDriver" />
+		<None Remove="Selenium.Support" />
+		<None Remove="DotNetSeleniumExtras.WaitHelpers" />
+		<None Remove="WebDriverManager" />
+		<None Remove="Utilities\" />
+		<None Remove="Tests\" />
+		<None Remove="System.Configuration.ConfigurationManager" />
+		<None Remove="Pages\" />
+		<None Remove="DotNetSeleniumExtras.PageObjects" />
+		<None Remove="DotNetSeleniumExtras.PageObjects.Core" />
+		<None Remove="ExtentReports" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Tests\" />
+		<Folder Include="Pages\" />
 	</ItemGroup>
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
 		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
