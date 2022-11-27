@@ -14,9 +14,7 @@ namespace FreeCRMDemo.Pages
 {
     public class HomePage
     {
- 
-
-        private IWebDriver driver;
+         private IWebDriver driver;
         public HomePage(IWebDriver driver)
         {
             this.driver = driver;
@@ -24,75 +22,108 @@ namespace FreeCRMDemo.Pages
         }
         //common save and delete and text elements
         [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']/div[2]/div/button[3]/i")]
-        private IWebElement commondeletebutton;
+        private readonly IWebElement commondeletebutton;
 
         [FindsBy(How = How.CssSelector, Using = "body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button.ui.red.button")]
-        private IWebElement commonconfirmdeletebutton;
+        private readonly IWebElement commonconfirmdeletebutton;
 
         [FindsBy(How = How.XPath, Using = "//p[contains(text(),'No records found')]")]
-        private IWebElement commonnorecordstext;
+        private readonly IWebElement commonnorecordstext;
   
         [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']/div[2]/div/button[2]")]
-        private IWebElement commonsavebutton;
+        private readonly IWebElement commonsavebutton;
 
         [FindsBy(How = How.Id, Using = "main-nav")]
-        private IWebElement Leftmenubar;
-
+        private readonly IWebElement Leftmenubar;
 
         //Add calender section elements
         [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[2]/button/i")]
-        private IWebElement LeftmenubaraddcalenderEvent;
+        private readonly IWebElement LeftmenubaraddcalenderEvent;
         
         [FindsBy(How = How.Name, Using = "title")]
-        private IWebElement calenderEventname;
+        private readonly IWebElement calenderEventname;
 
         [FindsBy(How = How.XPath, Using = "# dashboard-toolbar > div.ui.header.item.mb5.light-black")]
-        private IWebElement calendertitle;
+        private readonly IWebElement calendertitle;
 
         //Add contact section elements
         [FindsBy(How = How.CssSelector, Using = "#main-nav > div:nth-child(3) > button > i")]
-        private IWebElement Leftmenubaraddcontract;
+        private readonly IWebElement Leftmenubaraddcontract;
 
         [FindsBy(How = How.Name, Using = "first_name")]
-        private IWebElement firstname;
+        private readonly IWebElement firstname;
  
         [FindsBy(How = How.Name, Using = "last_name")]
-        private IWebElement lastname;
+        private readonly IWebElement lastname;
  
         [FindsBy(How = How.XPath, Using = "//*[@id='top-header-menu']/div[2]/div[2]/div")]
-        private IWebElement logoutheader;
+        private readonly IWebElement logoutheader;
 
         [FindsBy(How = How.CssSelector, Using = "#top-header-menu > div.right.menu > div.ui.buttons > div > div > a:nth-child(5) > span")]
-        private IWebElement logoubutton;
+        private readonly IWebElement logoubutton;
  
         //Add company section elements
         [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[4]/button/i")]
-        private IWebElement Leftmenubaraddcompany;
+        private readonly IWebElement Leftmenubaraddcompany;
 
         [FindsBy(How = How.Name, Using = "name")]
-        private IWebElement companyTitle;
+        private readonly IWebElement companyTitle;
  
         //Add Deal section elements
         [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[5]/button/i")]
         private IWebElement Leftmenubaradddeal;
 
         [FindsBy(How = How.Name, Using = "title")]
-        private IWebElement dealtitle;
+        private readonly IWebElement dealtitle;
+
+        //Add Task section elements
+        [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[6]/button/i")]
+        private IWebElement Leftmenubaraddtask;
+
+        [FindsBy(How = How.Name, Using = "title")]
+        private readonly IWebElement tasktitle;
+
+        //Add Case section elements
+         [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[7]/button/i")]
+        private readonly IWebElement Leftmenubaraddcase;
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']/div[2]/div/button[4]/i")]
+        private readonly IWebElement casedeletebutton;
+        
+
+        [FindsBy(How = How.Name, Using = "title")]
+        private readonly IWebElement casetitle;
+
+        //Add Document section elements
+        [FindsBy(How = How.XPath, Using = "//*[@id='main-nav']/div[9]/button/i")]
+        private readonly IWebElement Leftmenubaradddocument;
+
+        [FindsBy(How = How.Name, Using = "title")]
+        private readonly IWebElement documenttitle;
+
+        [FindsBy(How = How.XPath, Using = "//*[@id='dashboard-toolbar']/div[2]/div/button[3]/i")]
+        private readonly IWebElement deletedocumenttitle;
+        
+        [FindsBy(How = How.CssSelector, Using = "body > div.ui.page.modals.dimmer.transition.visible.active > div > div.actions > button.ui.red.button")]
+        private readonly IWebElement confirmdeletedocumenttitle;
+
+        [FindsBy(How = How.XPath, Using = "//div[contains(text(),'No files under this folder.')]")]
+        private readonly IWebElement nodocumentrecords;
+
 
 
         //common method to click lefemenu
-        public void clickLeftMenu()
+        public void ClickLeftMenu()
         {
             Actions mousehover = new Actions(driver);
             mousehover.MoveToElement(Leftmenubar).Perform();
-
         }
-        public void commonSaveButton()
+        public void CommonSaveButton()
         {
             this.commonsavebutton.Click();
         }
 
-        public void clickdeleteandConfirmdelete()
+        public void ClickdeleteandConfirmdelete()
         {
            this.commondeletebutton.Click();
             this.commonconfirmdeletebutton.Click();
@@ -104,24 +135,24 @@ namespace FreeCRMDemo.Pages
             string text = this.commonnorecordstext.Text;
             Assert.That(text, Is.EqualTo("No records found"));
         }
-        public void waitForvisibleDelete()
+        public void WaitForvisibleDelete()
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id='dashboard-toolbar']/div[2]/div/button[3]/i")));
-        }
+        }                                                                                          
 
         //Contact method
-        public void addNewContact()
+        public void AddNewContact()
         {
             try
             {
-                this.clickLeftMenu();
+                this.ClickLeftMenu();
                 Leftmenubaraddcontract.Click();
                 firstname.SendKeys(ConfigurationManager.AppSettings["firstname"]);
                 lastname.SendKeys(ConfigurationManager.AppSettings["lastname"]);
-                this.commonSaveButton();
-                this.waitForvisibleDelete();
-                this.clickdeleteandConfirmdelete();
+                this.CommonSaveButton();
+                this.WaitForvisibleDelete();
+                this.ClickdeleteandConfirmdelete();
                 Thread.Sleep(3000);
                 this.VerifyNoRecords();
             }
@@ -134,17 +165,17 @@ namespace FreeCRMDemo.Pages
         }
 
         //Calender method
-        public void addNewCalenderEvent()
+        public void AddNewCalenderEvent()
         {
             try
             {
-                this.clickLeftMenu();
+                this.ClickLeftMenu();
                 LeftmenubaraddcalenderEvent.Click();
                 Thread.Sleep(3000);
                 calenderEventname.SendKeys(ConfigurationManager.AppSettings["calenderEventname"]);
-                this.commonSaveButton();
-                this.waitForvisibleDelete();
-                this.clickdeleteandConfirmdelete();
+                this.CommonSaveButton();
+                this.WaitForvisibleDelete();
+                this.ClickdeleteandConfirmdelete();
                 string createeventtitle = driver.FindElement(By.XPath("//h3[contains(text(),'Events')]")).Text;
                 Assert.That(createeventtitle, Is.EqualTo("Events"));
             }
@@ -157,16 +188,16 @@ namespace FreeCRMDemo.Pages
         }
         
         //company method
-        public void addNewCompany()
+        public void AddNewCompany()
         {
             try
             {
-                this.clickLeftMenu();
+                this.ClickLeftMenu();
                 Leftmenubaraddcompany.Click();
                 companyTitle.SendKeys(ConfigurationManager.AppSettings["companyname"]);
-                this.commonSaveButton();
-                this.waitForvisibleDelete();
-                this.clickdeleteandConfirmdelete();
+                this.CommonSaveButton();
+                this.WaitForvisibleDelete();
+                this.ClickdeleteandConfirmdelete();
                 Thread.Sleep(3000);
                 this.VerifyNoRecords();
             }
@@ -177,17 +208,57 @@ namespace FreeCRMDemo.Pages
             }
 
         }
-
-        public void addNewDeal()
+        public void AddNewDeal()
         {
             try
             {
-                this.clickLeftMenu();
+                this.ClickLeftMenu();
                 Leftmenubaradddeal.Click();
                 dealtitle.SendKeys(ConfigurationManager.AppSettings["dealtitle"]);
-                this.commonSaveButton();
-                this.waitForvisibleDelete();
-                this.clickdeleteandConfirmdelete();
+                this.CommonSaveButton();
+                this.WaitForvisibleDelete();
+                this.ClickdeleteandConfirmdelete();
+                Thread.Sleep(5000);
+                this.VerifyNoRecords();
+            }
+            catch (Exception e)
+            {
+                TestContext.Progress.WriteLine(e.StackTrace);
+                throw;
+            }
+
+        }
+        public void AddNewTask()
+        {
+            try
+            {
+                this.ClickLeftMenu();
+                Leftmenubaraddtask.Click();
+                tasktitle.SendKeys(ConfigurationManager.AppSettings["tasktitle"]);
+                this.CommonSaveButton();
+                casedeletebutton.Click();
+                commonconfirmdeletebutton.Click();
+                Thread.Sleep(5000);
+                this.VerifyNoRecords();
+            }
+            catch (Exception e)
+            {
+                TestContext.Progress.WriteLine(e.StackTrace);
+                throw;
+            }
+
+        }
+        public void AddNewCase()
+        {
+            try
+            {
+                this.ClickLeftMenu();
+                Leftmenubaraddcase.Click();
+                casetitle.SendKeys(ConfigurationManager.AppSettings["casetitle"]);
+                this.CommonSaveButton();
+                this.WaitForvisibleDelete();
+                casedeletebutton.Click();
+                commonconfirmdeletebutton.Click();
                 Thread.Sleep(5000);
                 this.VerifyNoRecords();
             }
@@ -199,6 +270,30 @@ namespace FreeCRMDemo.Pages
 
         }
 
+        public void AddNewDocument()
+        {
+            try
+            {
+                this.ClickLeftMenu();
+                Leftmenubaradddocument.Click();
+                documenttitle.SendKeys(ConfigurationManager.AppSettings["documenttitle"]);
+                this.CommonSaveButton();
+                this.WaitForvisibleDelete();
+                this.ClickdeleteandConfirmdelete();
+                Thread.Sleep(5000);
+                
+                string text = this.nodocumentrecords.Text;
+                Assert.That(text, Is.EqualTo("No files under this folder."));
+            }
+            catch (Exception e)
+            {
+                TestContext.Progress.WriteLine(e.StackTrace);
+                throw;
+            }
+
+        }
+
+
         //public string Get8CharacterRandomString()
         //{
         //    string path = Path.GetRandomFileName();
@@ -206,13 +301,13 @@ namespace FreeCRMDemo.Pages
         //    return path.Substring(0, 8);  // Return 8 character string
         //}
 
-        public LoginPage logout()
+        public LoginPage Logout()
         {
             logoutheader.Click();
             logoubutton.Click();
             return new LoginPage(driver);
         }
-        public void searchContact()
+        public static void SearchContact()
         {
 
         }
