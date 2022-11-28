@@ -14,6 +14,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Remote;
 using WebDriverManager.DriverConfigs.Impl;
 
 namespace FreeCRMDemo.Utilities
@@ -60,23 +61,37 @@ namespace FreeCRMDemo.Utilities
             switch (browserName)
             {
                 case "Chrome":
-
+                    ChromeOptions Options = new ChromeOptions();
                     new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
-                    driver.Value = new ChromeDriver();
+                    //Uncomment the following line if you do not have grid setup and comment grid configuration
+                    driver.Value = new ChromeDriver(); 
+                    //Grid configuration
+                   // driver.Value = new RemoteWebDriver(
+                         //   new Uri("http://localhost:4444/ui#"), Options.ToCapabilities(), TimeSpan.FromSeconds(600));// NOTE: connection timeout of 600 seconds or more required for time to launch grid nodes if non are available.
+
                     break;
 
                 case "Firefox":
 
                     new WebDriverManager.DriverManager().SetUpDriver(new FirefoxConfig());
                     //Handling InsecureCertificates errors
-                    FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    firefoxOptions.AcceptInsecureCertificates = true;
-                    driver.Value = new FirefoxDriver(firefoxOptions);
+                    FirefoxOptions Options1 = new FirefoxOptions();
+                    //firefoxOptions.AcceptInsecureCertificates = true;
+                    //driver.Value = new FirefoxDriver(firefoxOptions);
+                    // driver.Value = new FirefoxConfig();
+                    //Grid configuration
+                    driver.Value = new RemoteWebDriver(
+                            new Uri("http://localhost:4444/ui#"), Options1.ToCapabilities(), TimeSpan.FromSeconds(600));// NOTE: connection timeout of 600 seconds or more required for time to launch grid nodes if non are available.
+
                     break;
 
                 case "Edge":
                     new WebDriverManager.DriverManager().SetUpDriver(new EdgeConfig());
-                    driver.Value = new EdgeDriver();
+                    EdgeOptions Options2 = new EdgeOptions();
+                    //  driver.Value = new EdgeDriver();
+                    driver.Value = new RemoteWebDriver(
+                            new Uri("http://localhost:4444/ui#"), Options2.ToCapabilities(), TimeSpan.FromSeconds(600));// NOTE: connection timeout of 600 seconds or more required for time to launch grid nodes if non are available.
+
                     break;
 
                 default:
@@ -138,7 +153,7 @@ namespace FreeCRMDemo.Utilities
 
         public MediaEntityModelProvider captureScreenShot(IWebDriver driver, String screenShotName)
         {
-            var screenshot =((ITakesScreenshot)driver).GetScreenshot().AsBase64EncodedString;
+            var screenshot = ((ITakesScreenshot)driver).GetScreenshot().AsBase64EncodedString;
             return MediaEntityBuilder.CreateScreenCaptureFromBase64String(screenshot, screenShotName).Build();
 
         }
