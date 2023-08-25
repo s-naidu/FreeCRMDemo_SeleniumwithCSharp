@@ -1,14 +1,8 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.DevTools.V105.CacheStorage;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FreeCRMDemo.Pages
 {
